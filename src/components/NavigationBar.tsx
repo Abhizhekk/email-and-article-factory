@@ -2,10 +2,11 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Home, Sun, Moon, Computer } from 'lucide-react';
+import { Sun, Moon, Computer } from 'lucide-react';
 import AnimatedTransition from './AnimatedTransition';
 import { useTheme } from '@/hooks/useTheme';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import Logo from './Logo';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -13,21 +14,14 @@ const NavigationBar = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
   
   const primaryNavItems = [
-    { name: 'Home', path: '/', icon: <Home size={18} /> },
+    { name: 'Home', path: '/' },
   ];
 
   return (
     <nav className="sticky top-0 z-50 w-full backdrop-blur-lg bg-background/80 border-b border-border/40">
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         <AnimatedTransition animation="slide-down">
-          <div 
-            className="flex items-center space-x-1 cursor-pointer" 
-            onClick={() => navigate('/')}
-          >
-            <span className="text-xl font-display font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              TextCraft AI
-            </span>
-          </div>
+          <Logo size="md" />
         </AnimatedTransition>
         
         <AnimatedTransition animation="slide-down" delay={100}>
@@ -44,7 +38,6 @@ const NavigationBar = () => {
                 )}
                 onClick={() => navigate(item.path)}
               >
-                {item.icon}
                 <span>{item.name}</span>
               </Button>
             ))}
