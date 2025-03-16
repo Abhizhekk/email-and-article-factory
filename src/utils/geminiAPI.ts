@@ -4,7 +4,17 @@ import { toast } from '@/components/ui/use-toast';
 const API_KEY = 'AIzaSyBdf7PsvrPgNzLS0rvZYvbbt6auEIc7fi8';
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
-type GeneratorType = 'email' | 'article' | 'coverLetter' | 'meeting' | 'speech';
+type GeneratorType = 
+  | 'email' 
+  | 'article' 
+  | 'coverLetter' 
+  | 'meeting' 
+  | 'speech'
+  | 'businessProposal'
+  | 'scriptwriting'
+  | 'paraphrasing'
+  | 'summarize'
+  | 'adCopy';
 
 interface GenerateEmailParams {
   recipient: string;
@@ -51,12 +61,61 @@ interface GenerateSpeechParams {
   additionalContext?: string;
 }
 
+interface GenerateBusinessProposalParams {
+  projectName: string;
+  clientName: string;
+  industry: string;
+  objectives: string;
+  budget?: string;
+  timeline?: string;
+  language?: string;
+  additionalContext?: string;
+}
+
+interface GenerateScriptwritingParams {
+  scriptType: 'youtube' | 'podcast' | 'shortFilm' | 'other';
+  topic: string;
+  duration: string;
+  targetAudience: string;
+  tone: string;
+  language?: string;
+  additionalContext?: string;
+}
+
+interface GenerateParaphrasingParams {
+  originalText: string;
+  tone?: 'formal' | 'casual' | 'academic' | 'simple';
+  language?: string;
+}
+
+interface GenerateSummarizeParams {
+  originalText: string;
+  length: 'short' | 'medium' | 'long';
+  includeKeyPoints: boolean;
+  language?: string;
+}
+
+interface GenerateAdCopyParams {
+  product: string;
+  platform: 'facebook' | 'google' | 'linkedin' | 'instagram' | 'twitter';
+  targetAudience: string;
+  uniqueSellingPoints: string;
+  toneStyle: string;
+  language?: string;
+  additionalContext?: string;
+}
+
 type GenerateParams = 
   | GenerateEmailParams
   | GenerateArticleParams
   | GenerateCoverLetterParams
   | GenerateMeetingParams
-  | GenerateSpeechParams;
+  | GenerateSpeechParams
+  | GenerateBusinessProposalParams
+  | GenerateScriptwritingParams
+  | GenerateParaphrasingParams
+  | GenerateSummarizeParams
+  | GenerateAdCopyParams;
 
 const createPrompt = (type: GeneratorType, params: GenerateParams): string => {
   let prompt = '';
@@ -109,6 +168,56 @@ const createPrompt = (type: GeneratorType, params: GenerateParams): string => {
       ${speechParams.additionalContext ? `Additional context: ${speechParams.additionalContext}` : ''}
       ${speechParams.language ? `Write this speech in ${speechParams.language}.` : ''}
       Structure it with an attention-grabbing opening, main points with examples, and a memorable conclusion.`;
+      break;
+
+    case 'businessProposal':
+      const proposalParams = params as GenerateBusinessProposalParams;
+      prompt = `Generate a professional business proposal for project "${proposalParams.projectName}" for ${proposalParams.clientName} in the ${proposalParams.industry} industry.
+      Key objectives: ${proposalParams.objectives}
+      ${proposalParams.budget ? `Budget: ${proposalParams.budget}` : ''}
+      ${proposalParams.timeline ? `Timeline: ${proposalParams.timeline}` : ''}
+      ${proposalParams.additionalContext ? `Additional context: ${proposalParams.additionalContext}` : ''}
+      ${proposalParams.language ? `Write this proposal in ${proposalParams.language}.` : ''}
+      Include an executive summary, problem statement, proposed solution, timeline, budget, and terms and conditions sections.`;
+      break;
+
+    case 'scriptwriting':
+      const scriptParams = params as GenerateScriptwritingParams;
+      prompt = `Create a ${scriptParams.scriptType} script about "${scriptParams.topic}" for ${scriptParams.targetAudience}.
+      The script should be approximately ${scriptParams.duration} in length.
+      Tone: ${scriptParams.tone}
+      ${scriptParams.additionalContext ? `Additional context: ${scriptParams.additionalContext}` : ''}
+      ${scriptParams.language ? `Write this script in ${scriptParams.language}.` : ''}
+      Format it properly with scenes, dialogue, and directions as appropriate for a ${scriptParams.scriptType}.`;
+      break;
+
+    case 'paraphrasing':
+      const paraphraseParams = params as GenerateParaphrasingParams;
+      prompt = `Paraphrase the following text while maintaining its original meaning:
+      "${paraphraseParams.originalText}"
+      ${paraphraseParams.tone ? `The paraphrased text should have a ${paraphraseParams.tone} tone.` : ''}
+      ${paraphraseParams.language ? `Provide the paraphrased text in ${paraphraseParams.language}.` : ''}
+      Ensure the paraphrased version is clear, concise, and avoids plagiarism.`;
+      break;
+
+    case 'summarize':
+      const summarizeParams = params as GenerateSummarizeParams;
+      prompt = `Summarize the following text into a ${summarizeParams.length} summary:
+      "${summarizeParams.originalText}"
+      ${summarizeParams.includeKeyPoints ? 'Include a bullet-point list of key points.' : ''}
+      ${summarizeParams.language ? `Provide the summary in ${summarizeParams.language}.` : ''}
+      Ensure the summary captures the main ideas and essential details of the original text.`;
+      break;
+
+    case 'adCopy':
+      const adParams = params as GenerateAdCopyParams;
+      prompt = `Write persuasive ad copy for ${adParams.product} to be used on ${adParams.platform}.
+      Target audience: ${adParams.targetAudience}
+      Unique selling points: ${adParams.uniqueSellingPoints}
+      Tone/Style: ${adParams.toneStyle}
+      ${adParams.additionalContext ? `Additional context: ${adParams.additionalContext}` : ''}
+      ${adParams.language ? `Write this ad copy in ${adParams.language}.` : ''}
+      Create compelling headline(s), body copy, and call-to-action that adheres to ${adParams.platform} ad format best practices.`;
       break;
   }
   

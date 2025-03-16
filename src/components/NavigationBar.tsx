@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { 
-  Mail, FileText, FileSpreadsheet, CalendarClock, MessageSquare, Home 
+  Mail, FileText, FileSpreadsheet, CalendarClock, MessageSquare, Home,
+  FileCheck, Play, RefreshCw, FileTerminal, MessageCircleMore
 } from 'lucide-react';
 import AnimatedTransition from './AnimatedTransition';
 
@@ -11,13 +12,21 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const navItems = [
+  const primaryNavItems = [
     { name: 'Home', path: '/', icon: <Home size={18} /> },
     { name: 'Email', path: '/email-generator', icon: <Mail size={18} /> },
     { name: 'Article', path: '/article-generator', icon: <FileText size={18} /> },
     { name: 'Cover Letter', path: '/cover-letter-generator', icon: <FileSpreadsheet size={18} /> },
     { name: 'Meeting', path: '/meeting-generator', icon: <CalendarClock size={18} /> },
     { name: 'Speech', path: '/speech-generator', icon: <MessageSquare size={18} /> },
+  ];
+
+  const secondaryNavItems = [
+    { name: 'Business Proposal', path: '/business-proposal-generator', icon: <FileCheck size={18} /> },
+    { name: 'Scriptwriting', path: '/scriptwriting-generator', icon: <Play size={18} /> },
+    { name: 'Paraphrasing', path: '/paraphrasing-tool', icon: <RefreshCw size={18} /> },
+    { name: 'Summarizer', path: '/text-summarizer', icon: <FileTerminal size={18} /> },
+    { name: 'Ad Copy', path: '/ad-copy-generator', icon: <MessageCircleMore size={18} /> },
   ];
 
   return (
@@ -33,7 +42,7 @@ const NavigationBar = () => {
         
         <AnimatedTransition animation="slide-down" delay={100}>
           <div className="hidden md:flex items-center space-x-1">
-            {navItems.map((item, index) => (
+            {primaryNavItems.map((item, index) => (
               <Button
                 key={item.path}
                 variant="ghost"

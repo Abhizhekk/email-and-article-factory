@@ -1,6 +1,7 @@
 
 import { 
-  Mail, FileText, FileSpreadsheet, CalendarClock, MessageSquare, Sparkles
+  Mail, FileText, FileSpreadsheet, CalendarClock, MessageSquare, 
+  Sparkles, FileCheck, Play, RefreshCw, FileTerminal, MessageCircleMore
 } from 'lucide-react';
 import Layout from '@/components/Layout';
 import GeneratorCard from '@/components/GeneratorCard';
@@ -11,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const Index = () => {
   const navigate = useNavigate();
 
-  const generators = [
+  const primaryGenerators = [
     {
       title: 'Email Generator',
       description: 'Create formal and informal emails with customizable tone, purpose, and language.',
@@ -44,6 +45,39 @@ const Index = () => {
     },
   ];
 
+  const secondaryGenerators = [
+    {
+      title: 'Business Proposal Generator',
+      description: 'Create structured business proposals with executive summaries, solutions, and terms.',
+      icon: <FileCheck size={20} />,
+      path: '/business-proposal-generator',
+    },
+    {
+      title: 'Scriptwriting Assistant',
+      description: 'Generate scripts for YouTube videos, podcasts, or short films with dialogue and directions.',
+      icon: <Play size={20} />,
+      path: '/scriptwriting-generator',
+    },
+    {
+      title: 'Paraphrasing Tool',
+      description: 'Rewrite content while maintaining original meaning and improving clarity.',
+      icon: <RefreshCw size={20} />,
+      path: '/paraphrasing-tool',
+    },
+    {
+      title: 'Text Summarizer',
+      description: 'Convert long texts into concise, easy-to-read summaries with key points.',
+      icon: <FileTerminal size={20} />,
+      path: '/text-summarizer',
+    },
+    {
+      title: 'Ad Copy Generator',
+      description: 'Create persuasive ad copy for social media platforms with compelling headlines and CTAs.',
+      icon: <MessageCircleMore size={20} />,
+      path: '/ad-copy-generator',
+    },
+  ];
+
   return (
     <Layout className="py-10">
       <div className="flex flex-col items-center text-center mb-16">
@@ -65,7 +99,7 @@ const Index = () => {
         <AnimatedTransition animation="slide-up" delay={200}>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-8">
             Create professional content in seconds with our AI-powered generators.
-            From emails to speeches, we've got you covered.
+            From emails to scripts, we've got you covered.
           </p>
         </AnimatedTransition>
         
@@ -81,17 +115,38 @@ const Index = () => {
         </AnimatedTransition>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        {generators.map((generator, index) => (
-          <GeneratorCard
-            key={generator.path}
-            title={generator.title}
-            description={generator.description}
-            icon={generator.icon}
-            path={generator.path}
-            delay={400 + index * 100}
-          />
-        ))}
+      <div className="space-y-16">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-display font-semibold text-center mb-6">Popular Generators</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {primaryGenerators.map((generator, index) => (
+              <GeneratorCard
+                key={generator.path}
+                title={generator.title}
+                description={generator.description}
+                icon={generator.icon}
+                path={generator.path}
+                delay={400 + index * 100}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="text-2xl font-display font-semibold text-center mb-6">More Tools</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {secondaryGenerators.map((generator, index) => (
+              <GeneratorCard
+                key={generator.path}
+                title={generator.title}
+                description={generator.description}
+                icon={generator.icon}
+                path={generator.path}
+                delay={400 + index * 100}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </Layout>
   );
